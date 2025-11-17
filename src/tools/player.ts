@@ -191,10 +191,12 @@ export async function equipItem(itemId: string, password: string): Promise<strin
 
   const item = data.player.inventory[itemIndex];
   const slot = item.type as keyof typeof data.player.equipment;
-  
+
   // 現在装備中のアイテムがあれば外す
-  if (data.player.equipment[slot]) {
-    data.player.inventory.push(data.player.equipment[slot]!);
+  const currentItem = data.player.equipment[slot];
+  if (currentItem && 'stats' in currentItem) {
+    // Type guard: Only push Equipment items to equipment inventory
+    data.player.inventory.push(currentItem as Equipment);
   }
 
   // 新しいアイテムを装備
@@ -236,8 +238,13 @@ export async function unequipItem(slot: string, password: string): Promise<strin
     return `${slot}スロットには何も装備されていません。`;
   }
 
+  // Type guard: Ensure we only push Equipment to equipment inventory
+  if (!('stats' in item)) {
+    return `エラー: ${slot}スロットに装備アイテムがありません。`;
+  }
+
   // インベントリに移動
-  data.player.inventory.push(item);
+  data.player.inventory.push(item as Equipment);
   data.player.equipment[slotKey] = null;
 
   await storage.save(data, password);

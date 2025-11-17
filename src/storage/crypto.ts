@@ -75,9 +75,12 @@ export class CryptoStorage {
           weapon: null,
           shield: null,
           armor: null,
-          accessory: null
+          accessory: null,
+          item1: null,
+          item2: null
         },
         inventory: [],
+        itemInventory: [],
         gold: 0,
         state: 'idle'
       },
