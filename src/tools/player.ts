@@ -102,11 +102,27 @@ export async function viewStatus(password: string): Promise<string> {
   output += `持ち物インベントリ: ${data.player.itemInventory?.length || 0}個\n`;
 
   if (data.player.currentDungeon) {
-    const remaining = Math.max(0, data.player.currentDungeon.estimatedEndTime - Date.now());
+    const now = Date.now();
+    const { startTime, estimatedEndTime } = data.player.currentDungeon;
+    const remaining = Math.max(0, estimatedEndTime - now);
+    const totalTime = estimatedEndTime - startTime;
+    const elapsed = now - startTime;
+    const progressPercentage = Math.min((elapsed / totalTime) * 100, 100);
+
     const minutes = Math.ceil(remaining / 60000);
+    const seconds = Math.ceil((remaining % 60000) / 1000);
+
     output += `\n⚔️  ダンジョン探索中！\n`;
-    output += `残り時間: 約${minutes}分\n`;
-    output += `\n'check_progress'で進行状況を確認できます。`;
+    output += `進行状況: ${progressPercentage.toFixed(1)}%\n`;
+    output += `残り時間: ${minutes}分${seconds}秒\n`;
+
+    // 簡易プログレスバー
+    const barLength = 15;
+    const filledLength = Math.floor((progressPercentage / 100) * barLength);
+    const bar = '█'.repeat(filledLength) + '░'.repeat(barLength - filledLength);
+    output += `[${bar}]\n`;
+
+    output += `\n'check_progress'で詳細な進行状況を確認できます。`;
   }
 
   return output;

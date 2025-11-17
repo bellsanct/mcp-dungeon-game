@@ -123,7 +123,7 @@ export async function startDungeon(dungeonId: string, password: string): Promise
 
 export async function checkProgress(password: string): Promise<string> {
   const data = await storage.load(password);
-  
+
   if (!data.player.name) {
     return "プレイヤーが見つかりません。先に'create_player'を実行してください。";
   }
@@ -133,13 +133,71 @@ export async function checkProgress(password: string): Promise<string> {
   }
 
   const now = Date.now();
-  const { dungeonId, estimatedEndTime } = data.player.currentDungeon;
+  const { dungeonId, startTime, estimatedEndTime } = data.player.currentDungeon;
   const remaining = estimatedEndTime - now;
 
   if (remaining > 0) {
-    const minutes = Math.ceil(remaining / 60000);
+    // 探索中 - リアルタイム進行状況を計算
     const dungeon = getDungeonById(dungeonId);
-    return `⚔️  ${dungeon?.name}を探索中...\n\n残り時間: 約${minutes}分\n\n完了後、もう一度確認してください！`;
+
+    if (!dungeon) {
+      return "エラー: ダンジョンデータが見つかりません。";
+    }
+
+    // 経過時間と進行度を計算
+    const totalTime = estimatedEndTime - startTime;
+    const elapsed = now - startTime;
+    const progressPercentage = Math.min((elapsed / totalTime) * 100, 100);
+
+    // 現在の階層を推定（線形補間）
+    const currentFloor = Math.floor((dungeon.floors * progressPercentage) / 100);
+    const displayFloor = Math.max(1, Math.min(currentFloor, dungeon.floors));
+
+    // 残り時間表示
+    const minutes = Math.ceil(remaining / 60000);
+    const seconds = Math.ceil((remaining % 60000) / 1000);
+
+    let output = `⚔️  ${dungeon.name}を探索中...\n\n`;
+    output += `進行状況: ${progressPercentage.toFixed(1)}%\n`;
+    output += `推定現在地: ${displayFloor}階 / ${dungeon.floors}階\n`;
+    output += `残り時間: ${minutes}分${seconds}秒\n\n`;
+
+    // プログレスバー
+    const barLength = 20;
+    const filledLength = Math.floor((progressPercentage / 100) * barLength);
+    const bar = '█'.repeat(filledLength) + '░'.repeat(barLength - filledLength);
+    output += `[${bar}] ${progressPercentage.toFixed(0)}%\n\n`;
+
+    // 装備している持ち物の状態
+    const playerStats = calculateTotalStats(data.player.equipment);
+    const equippedHerb = data.player.equipment.item1?.type === 'herb'
+      ? data.player.equipment.item1
+      : data.player.equipment.item2?.type === 'herb'
+      ? data.player.equipment.item2
+      : undefined;
+
+    const equippedCharm = data.player.equipment.item1?.type === 'charm'
+      ? data.player.equipment.item1
+      : data.player.equipment.item2?.type === 'charm'
+      ? data.player.equipment.item2
+      : undefined;
+
+    if (equippedHerb || equippedCharm) {
+      output += `持ち物状態:\n`;
+      if (equippedHerb) {
+        output += `  🌿 ${equippedHerb.name}: 待機中\n`;
+      }
+      if (equippedCharm) {
+        output += `  🛡️ ${equippedCharm.name}: 待機中\n`;
+      }
+      output += '\n';
+    }
+
+    output += `💡 ヒント:\n`;
+    output += `- 'view_status'でキャラクター情報を確認\n`;
+    output += `- 完了後、もう一度'check_progress'で結果を確認\n`;
+
+    return output;
   }
 
   // ダンジョン完了 - 結果を処理
