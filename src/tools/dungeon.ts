@@ -193,9 +193,40 @@ export async function checkProgress(password: string): Promise<string> {
       output += '\n';
     }
 
+    // 探索中の活動概要（推定）
+    output += `=== 探索状況 ===\n`;
+
+    // 進行度に基づいて推定される活動
+    const estimatedBattles = Math.floor(displayFloor * 2); // 各階2戦想定
+    const estimatedEvents = Math.floor(displayFloor * 0.3); // 30%程度でイベント
+
+    output += `推定戦闘数: 約${estimatedBattles}回\n`;
+    output += `推定イベント: 約${estimatedEvents}回\n\n`;
+
+    // 現在までの階層表示（簡易）
+    if (displayFloor > 1) {
+      output += `通過した階層:\n`;
+      const maxDisplay = Math.min(displayFloor, 5); // 最新5階まで表示
+      const startFloor = Math.max(1, displayFloor - maxDisplay + 1);
+
+      for (let f = startFloor; f <= displayFloor; f++) {
+        if (f === displayFloor) {
+          output += `  → ${f}階 (探索中...)\n`;
+        } else {
+          output += `  ✓ ${f}階 (通過済み)\n`;
+        }
+      }
+
+      if (displayFloor < dungeon.floors) {
+        output += `  ... ${dungeon.floors - displayFloor}階が残っています\n`;
+      }
+      output += '\n';
+    }
+
     output += `💡 ヒント:\n`;
     output += `- 'view_status'でキャラクター情報を確認\n`;
-    output += `- 完了後、もう一度'check_progress'で結果を確認\n`;
+    output += `- 完了後、もう一度'check_progress'で詳細な結果を確認\n`;
+    output += `- 'view_battle_log'で完了後の戦闘ログを閲覧可能\n`;
 
     return output;
   }
