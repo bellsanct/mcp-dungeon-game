@@ -7,6 +7,7 @@ export interface CombatResult {
   criticalHits: number;
   dodges: number;
   herbUsed: boolean;
+  playerHpAfterBattle: number;
 }
 
 export function calculateTotalStats(equipment: { [key: string]: Equipment | Item | null }): Stats {
@@ -36,6 +37,8 @@ export function calculateTotalStats(equipment: { [key: string]: Equipment | Item
 export function simulateCombat(
   playerStats: Stats,
   enemy: Enemy,
+  playerCurrentHp: number,
+  playerMaxHp: number,
   equippedHerb?: Item
 ): CombatResult {
   const result: CombatResult = {
@@ -44,13 +47,14 @@ export function simulateCombat(
     damageTaken: 0,
     criticalHits: 0,
     dodges: 0,
-    herbUsed: false
+    herbUsed: false,
+    playerHpAfterBattle: 0
   };
 
-  // Simple combat simulation
-  let playerHp = 100 + playerStats.defense * 5; // Base HP + defense bonus
-  const maxPlayerHp = playerHp;
-  let enemyHp = 100 + enemy.stats.defense * 5;
+  // Combat simulation using actual HP
+  let playerHp = playerCurrentHp;
+  const maxPlayerHp = playerMaxHp;
+  let enemyHp = enemy.stats.hitpoint || 100; // Use enemy hitpoint or default 100
 
   let turn = 0;
   const maxTurns = 100; // Prevent infinite loops
@@ -113,6 +117,9 @@ export function simulateCombat(
   if (turn >= maxTurns) {
     result.victory = playerHp > enemyHp;
   }
+
+  // Set player HP after battle (minimum 0)
+  result.playerHpAfterBattle = Math.max(0, playerHp);
 
   return result;
 }

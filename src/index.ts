@@ -33,12 +33,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         inputSchema: {
           type: 'object',
           properties: {
-            password: {
+            save_key: {
               type: 'string',
-              description: 'セーブデータを暗号化するパスワード。このパスワードは覚えておいてください！すべてのゲーム操作で必要になります。',
+              description: 'セーブデータを暗号化するセーブキー。このキーは覚えておいてください！すべてのゲーム操作で必要になります。',
             },
           },
-          required: ['password'],
+          required: ['save_key'],
         },
       },
       {
@@ -51,12 +51,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: 'string',
               description: 'キャラクター名',
             },
-            password: {
+            save_key: {
               type: 'string',
-              description: 'ゲームパスワード',
+              description: 'セーブキー',
             },
           },
-          required: ['name', 'password'],
+          required: ['name', 'save_key'],
         },
       },
       {
@@ -65,12 +65,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         inputSchema: {
           type: 'object',
           properties: {
-            password: {
+            save_key: {
               type: 'string',
-              description: 'ゲームパスワード',
+              description: 'セーブキー',
             },
           },
-          required: ['password'],
+          required: ['save_key'],
         },
       },
       {
@@ -79,12 +79,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         inputSchema: {
           type: 'object',
           properties: {
-            password: {
+            save_key: {
               type: 'string',
-              description: 'ゲームパスワード',
+              description: 'セーブキー',
             },
           },
-          required: ['password'],
+          required: ['save_key'],
         },
       },
       {
@@ -97,12 +97,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: 'string',
               description: '装備するアイテムのID（インベントリに表示）',
             },
-            password: {
+            save_key: {
               type: 'string',
-              description: 'ゲームパスワード',
+              description: 'セーブキー',
             },
           },
-          required: ['item_id', 'password'],
+          required: ['item_id', 'save_key'],
         },
       },
       {
@@ -116,12 +116,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               description: '装備スロット: weapon, shield, armor, または accessory',
               enum: ['weapon', 'shield', 'armor', 'accessory'],
             },
-            password: {
+            save_key: {
               type: 'string',
-              description: 'ゲームパスワード',
+              description: 'セーブキー',
             },
           },
-          required: ['slot', 'password'],
+          required: ['slot', 'save_key'],
         },
       },
       {
@@ -130,12 +130,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         inputSchema: {
           type: 'object',
           properties: {
-            password: {
+            save_key: {
               type: 'string',
-              description: 'ゲームパスワード',
+              description: 'セーブキー',
             },
           },
-          required: ['password'],
+          required: ['save_key'],
         },
       },
       {
@@ -148,12 +148,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: 'string',
               description: 'ダンジョンのID（list_dungeonsから取得）',
             },
-            password: {
+            save_key: {
               type: 'string',
-              description: 'ゲームパスワード',
+              description: 'セーブキー',
             },
           },
-          required: ['dungeon_id', 'password'],
+          required: ['dungeon_id', 'save_key'],
         },
       },
       {
@@ -166,12 +166,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: 'string',
               description: '探索するダンジョンのID',
             },
-            password: {
+            save_key: {
               type: 'string',
-              description: 'ゲームパスワード',
+              description: 'セーブキー',
             },
           },
-          required: ['dungeon_id', 'password'],
+          required: ['dungeon_id', 'save_key'],
         },
       },
       {
@@ -180,12 +180,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         inputSchema: {
           type: 'object',
           properties: {
-            password: {
+            save_key: {
               type: 'string',
-              description: 'ゲームパスワード',
+              description: 'セーブキー',
             },
           },
-          required: ['password'],
+          required: ['save_key'],
         },
       },
       {
@@ -194,12 +194,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         inputSchema: {
           type: 'object',
           properties: {
-            password: {
+            save_key: {
               type: 'string',
-              description: 'ゲームパスワード',
+              description: 'セーブキー',
             },
           },
-          required: ['password'],
+          required: ['save_key'],
         },
       },
       {
@@ -217,12 +217,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               description: '持ち物スロット: item1 または item2',
               enum: ['item1', 'item2'],
             },
-            password: {
+            save_key: {
               type: 'string',
-              description: 'ゲームパスワード',
+              description: 'セーブキー',
             },
           },
-          required: ['item_id', 'slot', 'password'],
+          required: ['item_id', 'slot', 'save_key'],
         },
       },
       {
@@ -236,12 +236,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               description: '持ち物スロット: item1 または item2',
               enum: ['item1', 'item2'],
             },
-            password: {
+            save_key: {
               type: 'string',
-              description: 'ゲームパスワード',
+              description: 'セーブキー',
             },
           },
-          required: ['slot', 'password'],
+          required: ['slot', 'save_key'],
         },
       },
       {
@@ -250,12 +250,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         inputSchema: {
           type: 'object',
           properties: {
-            password: {
+            save_key: {
               type: 'string',
-              description: 'ゲームパスワード',
+              description: 'セーブキー',
             },
           },
-          required: ['password'],
+          required: ['save_key'],
         },
       },
       {
@@ -268,12 +268,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: 'string',
               description: '購入するアイテムのID（shop_inventoryで確認）',
             },
-            password: {
+            save_key: {
               type: 'string',
-              description: 'ゲームパスワード',
+              description: 'セーブキー',
             },
           },
-          required: ['item_id', 'password'],
+          required: ['item_id', 'save_key'],
         },
       },
     ],
@@ -307,7 +307,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               type: 'text',
               text: await playerTools.createPlayer(
                 args.name as string,
-                args.password as string
+                args.save_key as string
               ),
             },
           ],
@@ -340,7 +340,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               type: 'text',
               text: await playerTools.equipItem(
                 args.item_id as string,
-                args.password as string
+                args.save_key as string
               ),
             },
           ],
@@ -353,7 +353,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               type: 'text',
               text: await playerTools.unequipItem(
                 args.slot as string,
-                args.password as string
+                args.save_key as string
               ),
             },
           ],
@@ -376,7 +376,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               type: 'text',
               text: await dungeonTools.dungeonInfo(
                 args.dungeon_id as string,
-                args.password as string
+                args.save_key as string
               ),
             },
           ],
@@ -389,7 +389,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               type: 'text',
               text: await dungeonTools.startDungeon(
                 args.dungeon_id as string,
-                args.password as string
+                args.save_key as string
               ),
             },
           ],
@@ -423,7 +423,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               text: await playerTools.equipHoldingItem(
                 args.item_id as string,
                 args.slot as 'item1' | 'item2',
-                args.password as string
+                args.save_key as string
               ),
             },
           ],
@@ -436,7 +436,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               type: 'text',
               text: await playerTools.unequipHoldingItem(
                 args.slot as 'item1' | 'item2',
-                args.password as string
+                args.save_key as string
               ),
             },
           ],
@@ -447,7 +447,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           content: [
             {
               type: 'text',
-              text: await shopTools.getShopInventory(args.password as string),
+              text: await shopTools.getShopInventory(args.save_key as string),
             },
           ],
         };
@@ -459,7 +459,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               type: 'text',
               text: await shopTools.buyItem(
                 args.item_id as string,
-                args.password as string
+                args.save_key as string
               ),
             },
           ],

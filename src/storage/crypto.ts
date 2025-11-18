@@ -82,6 +82,8 @@ export class CryptoStorage {
         inventory: [],
         itemInventory: [],
         gold: 0,
+        hp: 100,
+        maxHp: 100,
         state: 'idle'
       },
       version: '0.1.0'
@@ -149,6 +151,14 @@ export class CryptoStorage {
       }
       if (!data.player.equipment.item2 && data.player.equipment.item2 !== null) {
         data.player.equipment.item2 = null;
+      }
+
+      // HPシステムの追加
+      if (typeof data.player.hp !== 'number') {
+        data.player.hp = 100;
+      }
+      if (typeof data.player.maxHp !== 'number') {
+        data.player.maxHp = 100;
       }
     }
 

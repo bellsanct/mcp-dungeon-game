@@ -5,8 +5,8 @@ import { cloneItem } from '../data/items.js';
 
 const storage = new CryptoStorage();
 
-export async function buyItem(itemId: string, password: string): Promise<string> {
-  const gameData = await storage.load(password);
+export async function buyItem(itemId: string, saveKey: string): Promise<string> {
+  const gameData = await storage.load(saveKey);
 
   // 探索中は購入不可
   if (gameData.player.state === 'exploring') {
@@ -26,7 +26,7 @@ export async function buyItem(itemId: string, password: string): Promise<string>
     const purchasedEquipment = cloneEquipment(shopEquipment);
     gameData.player.inventory.push(purchasedEquipment);
 
-    await storage.save(gameData, password);
+    await storage.save(gameData, saveKey);
     return `${shopEquipment.name}を${shopEquipment.price}Gで購入しました。残りゴールド: ${gameData.player.gold}G`;
   }
 
@@ -43,15 +43,15 @@ export async function buyItem(itemId: string, password: string): Promise<string>
     const purchasedItem = cloneItem(shopItem);
     gameData.player.itemInventory.push(purchasedItem);
 
-    await storage.save(gameData, password);
+    await storage.save(gameData, saveKey);
     return `${shopItem.name}を${shopItem.price}Gで購入しました。残りゴールド: ${gameData.player.gold}G`;
   }
 
   return `アイテムID "${itemId}" は見つかりませんでした。`;
 }
 
-export async function getShopInventory(password: string): Promise<string> {
-  const gameData = await storage.load(password);
+export async function getShopInventory(saveKey: string): Promise<string> {
+  const gameData = await storage.load(saveKey);
 
   // 探索中は閲覧のみ可能（購入は不可）
   const canBuy = gameData.player.state === 'idle';

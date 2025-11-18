@@ -7,6 +7,7 @@ export interface Stats {
   defense: number;
   speed: number;
   luck: number;
+  hitpoint?: number; // モンスター用HP
 }
 
 export interface Equipment {
@@ -96,6 +97,8 @@ export interface PlayerData {
   inventory: Equipment[];
   itemInventory: Item[];
   gold: number;
+  hp: number; // 現在のHP
+  maxHp: number; // 最大HP
   currentDungeon?: DungeonProgress;
   state: 'idle' | 'exploring'; // プレイヤーの状態
 }

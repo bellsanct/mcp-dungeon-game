@@ -5,17 +5,17 @@ import type { GameData, Equipment, Item } from '../types.js';
 
 const storage = new CryptoStorage();
 
-export async function initializeGame(password: string): Promise<string> {
+export async function initializeGame(saveKey: string): Promise<string> {
   if (storage.exists()) {
     return `ゲームは既に初期化されています: ${storage.getSaveLocation()}\n別のコマンドでプレイヤーを読み込んでください。`;
   }
 
-  await storage.initialize(password);
+  await storage.initialize(saveKey);
   return `ゲームを初期化しました！\n保存場所: ${storage.getSaveLocation()}\n\n'create_player'でキャラクターを作成してください。`;
 }
 
-export async function createPlayer(name: string, password: string): Promise<string> {
-  const data = await storage.load(password);
+export async function createPlayer(name: string, saveKey: string): Promise<string> {
+  const data = await storage.load(saveKey);
 
   if (data.player.name) {
     return `プレイヤーは既に存在します: ${data.player.name}\n'view_status'でキャラクター情報を確認してください。`;
@@ -32,16 +32,18 @@ export async function createPlayer(name: string, password: string): Promise<stri
   data.player.equipment.item1 = null;
   data.player.equipment.item2 = null;
   data.player.gold = 100; // 初期ゴールド
+  data.player.hp = 100; // 初期HP
+  data.player.maxHp = 100; // 最大HP
   data.player.itemInventory = []; // 持ち物インベントリを初期化
   data.player.state = 'idle';
 
-  await storage.save(data, password);
+  await storage.save(data, saveKey);
 
   return `ようこそ、${name}！\n\n初期装備:\n- ${starterWeapon.name} (攻撃力+${starterWeapon.stats.attack})\n- ${starterArmor.name} (防御力+${starterArmor.stats.defense})\n\n初期ゴールド: 100\n\n'view_status'でステータスを確認できます！`;
 }
 
-export async function viewStatus(password: string): Promise<string> {
-  const data = await storage.load(password);
+export async function viewStatus(saveKey: string): Promise<string> {
+  const data = await storage.load(saveKey);
   
   if (!data.player.name) {
     return "プレイヤーが見つかりません。先に'create_player'を実行してください。";
@@ -55,8 +57,9 @@ export async function viewStatus(password: string): Promise<string> {
   
   let output = `=== ${data.player.name} ===\n\n`;
   output += `状態: ${stateIcon} ${stateText}\n`;
+  output += `HP: ${data.player.hp}/${data.player.maxHp}\n`;
   output += `ゴールド: ${data.player.gold}\n\n`;
-  
+
   output += `ステータス:\n`;
   output += `  攻撃力: ${stats.attack}\n`;
   output += `  防御力: ${stats.defense}\n`;
@@ -128,8 +131,8 @@ export async function viewStatus(password: string): Promise<string> {
   return output;
 }
 
-export async function viewInventory(password: string): Promise<string> {
-  const data = await storage.load(password);
+export async function viewInventory(saveKey: string): Promise<string> {
+  const data = await storage.load(saveKey);
 
   if (!data.player.name) {
     return "プレイヤーが見つかりません。先に'create_player'を実行してください。";
@@ -188,8 +191,8 @@ export async function viewInventory(password: string): Promise<string> {
   return output;
 }
 
-export async function equipItem(itemId: string, password: string): Promise<string> {
-  const data = await storage.load(password);
+export async function equipItem(itemId: string, saveKey: string): Promise<string> {
+  const data = await storage.load(saveKey);
   
   if (!data.player.name) {
     return "プレイヤーが見つかりません。先に'create_player'を実行してください。";
@@ -219,7 +222,7 @@ export async function equipItem(itemId: string, password: string): Promise<strin
   data.player.equipment[slot] = item;
   data.player.inventory.splice(itemIndex, 1);
 
-  await storage.save(data, password);
+  await storage.save(data, saveKey);
 
   const slotNames: { [key: string]: string } = {
     weapon: '武器',
@@ -231,8 +234,8 @@ export async function equipItem(itemId: string, password: string): Promise<strin
   return `${item.name}を${slotNames[slot]}スロットに装備しました！\n\n'view_status'で更新されたステータスを確認できます。`;
 }
 
-export async function unequipItem(slot: string, password: string): Promise<string> {
-  const data = await storage.load(password);
+export async function unequipItem(slot: string, saveKey: string): Promise<string> {
+  const data = await storage.load(saveKey);
   
   if (!data.player.name) {
     return "プレイヤーが見つかりません。先に'create_player'を実行してください。";
@@ -263,7 +266,7 @@ export async function unequipItem(slot: string, password: string): Promise<strin
   data.player.inventory.push(item as Equipment);
   data.player.equipment[slotKey] = null;
 
-  await storage.save(data, password);
+  await storage.save(data, saveKey);
 
   const slotNames: { [key: string]: string } = {
     weapon: '武器',
@@ -275,8 +278,8 @@ export async function unequipItem(slot: string, password: string): Promise<strin
   return `${slotNames[slot]}スロットから${item.name}を外しました。`;
 }
 
-export async function equipHoldingItem(itemId: string, slot: 'item1' | 'item2', password: string): Promise<string> {
-  const data = await storage.load(password);
+export async function equipHoldingItem(itemId: string, slot: 'item1' | 'item2', saveKey: string): Promise<string> {
+  const data = await storage.load(saveKey);
 
   if (!data.player.name) {
     return "プレイヤーが見つかりません。先に'create_player'を実行してください。";
@@ -304,13 +307,13 @@ export async function equipHoldingItem(itemId: string, slot: 'item1' | 'item2', 
   data.player.equipment[slot] = item;
   data.player.itemInventory.splice(itemIndex, 1);
 
-  await storage.save(data, password);
+  await storage.save(data, saveKey);
 
   return `${item.name}を${slot === 'item1' ? '持ち物1' : '持ち物2'}スロットに装備しました！\n効果: ${item.description}`;
 }
 
-export async function unequipHoldingItem(slot: 'item1' | 'item2', password: string): Promise<string> {
-  const data = await storage.load(password);
+export async function unequipHoldingItem(slot: 'item1' | 'item2', saveKey: string): Promise<string> {
+  const data = await storage.load(saveKey);
 
   if (!data.player.name) {
     return "プレイヤーが見つかりません。先に'create_player'を実行してください。";
@@ -330,7 +333,7 @@ export async function unequipHoldingItem(slot: 'item1' | 'item2', password: stri
   data.player.itemInventory.push(item as Item);
   data.player.equipment[slot] = null;
 
-  await storage.save(data, password);
+  await storage.save(data, saveKey);
 
   return `${slot === 'item1' ? '持ち物1' : '持ち物2'}スロットから${(item as Item).name}を外しました。`;
 }

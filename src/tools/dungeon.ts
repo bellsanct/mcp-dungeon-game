@@ -8,8 +8,8 @@ import type { Dungeon, BattleLogEntry, Item } from '../types.js';
 
 const storage = new CryptoStorage();
 
-export async function listDungeons(password: string): Promise<string> {
-  const data = await storage.load(password);
+export async function listDungeons(saveKey: string): Promise<string> {
+  const data = await storage.load(saveKey);
   
   if (!data.player.name) {
     return "プレイヤーが見つかりません。先に'create_player'を実行してください。";
@@ -38,8 +38,8 @@ export async function listDungeons(password: string): Promise<string> {
   return output;
 }
 
-export async function dungeonInfo(dungeonId: string, password: string): Promise<string> {
-  const data = await storage.load(password);
+export async function dungeonInfo(dungeonId: string, saveKey: string): Promise<string> {
+  const data = await storage.load(saveKey);
   
   if (!data.player.name) {
     return "プレイヤーが見つかりません。先に'create_player'を実行してください。";
@@ -82,8 +82,8 @@ export async function dungeonInfo(dungeonId: string, password: string): Promise<
   return output;
 }
 
-export async function startDungeon(dungeonId: string, password: string): Promise<string> {
-  const data = await storage.load(password);
+export async function startDungeon(dungeonId: string, saveKey: string): Promise<string> {
+  const data = await storage.load(saveKey);
   
   if (!data.player.name) {
     return "プレイヤーが見つかりません。先に'create_player'を実行してください。";
@@ -116,13 +116,13 @@ export async function startDungeon(dungeonId: string, password: string): Promise
   };
   data.player.state = 'exploring';
 
-  await storage.save(data, password);
+  await storage.save(data, saveKey);
 
   return `🗡️  ${dungeon.name}の探索を開始しました！\n\n推定完了時刻: ${actualTime}分後\n\n'check_progress'で進行状況を確認できます。`;
 }
 
-export async function checkProgress(password: string): Promise<string> {
-  const data = await storage.load(password);
+export async function checkProgress(saveKey: string): Promise<string> {
+  const data = await storage.load(saveKey);
 
   if (!data.player.name) {
     return "プレイヤーが見つかりません。先に'create_player'を実行してください。";
@@ -250,11 +250,11 @@ export async function checkProgress(password: string): Promise<string> {
   }
 
   // ダンジョン完了 - 結果を処理
-  return await completeDungeon(password);
+  return await completeDungeon(saveKey);
 }
 
-async function completeDungeon(password: string): Promise<string> {
-  const data = await storage.load(password);
+async function completeDungeon(saveKey: string): Promise<string> {
+  const data = await storage.load(saveKey);
   
   if (!data.player.currentDungeon) {
     return "進行中のダンジョンがありません。";
@@ -300,6 +300,10 @@ async function completeDungeon(password: string): Promise<string> {
   let herbUsedTotal = false;
   let charmUsedTotal = false;
 
+  // プレイヤーのHP管理
+  let playerCurrentHp = data.player.hp;
+  const playerMaxHp = data.player.maxHp;
+
   // 階層ごとに進行
   while (currentFloor <= dungeon.floors) {
     // イベント判定
@@ -340,8 +344,13 @@ async function completeDungeon(password: string): Promise<string> {
       const combatResult = simulateCombat(
         playerStats,
         enemy,
+        playerCurrentHp,
+        playerMaxHp,
         herbUsedTotal ? undefined : equippedHerb
       );
+
+      // 戦闘後のHPを更新
+      playerCurrentHp = combatResult.playerHpAfterBattle;
 
       // 薬草が使用された場合
       if (combatResult.herbUsed) {
@@ -378,14 +387,17 @@ async function completeDungeon(password: string): Promise<string> {
         output += `獲得したものの一部を失いました。\n`;
         totalGold = Math.floor(totalGold * 0.5);
         allLoot.length = Math.floor(allLoot.length * 0.5);
-        
+
         data.player.gold += totalGold;
         data.player.inventory.push(...allLoot);
+        // HP半分で復帰
+        data.player.hp = Math.floor(data.player.maxHp * 0.5);
         data.player.currentDungeon = undefined;
         data.player.state = 'idle';
-        await storage.save(data, password);
-        
+        await storage.save(data, saveKey);
+
         output += `\nゴールド: +${totalGold}\n`;
+        output += `HP: ${data.player.hp}/${data.player.maxHp} (半分で復帰)\n`;
         return output;
       }
     }
@@ -398,8 +410,13 @@ async function completeDungeon(password: string): Promise<string> {
   const bossCombat = simulateCombat(
     playerStats,
     dungeon.boss,
+    playerCurrentHp,
+    playerMaxHp,
     herbUsedTotal ? undefined : equippedHerb
   );
+
+  // 戦闘後のHPを更新
+  playerCurrentHp = bossCombat.playerHpAfterBattle;
 
   if (bossCombat.herbUsed) {
     herbUsedTotal = true;
@@ -457,12 +474,15 @@ async function completeDungeon(password: string): Promise<string> {
     }
   }
 
+  // HPを更新（ダンジョン完了後は全回復）
+  data.player.hp = data.player.maxHp;
   data.player.currentDungeon = undefined;
   data.player.state = 'idle';
 
-  await storage.save(data, password);
+  await storage.save(data, saveKey);
 
   output += `\n=== 報酬 ===\n`;
+  output += `HP: ${data.player.hp}/${data.player.maxHp} (全回復！)\n`;
   output += `ゴールド: +${totalGold} (合計: ${data.player.gold})\n`;
 
   if (allLoot.length > 0) {
@@ -505,8 +525,8 @@ async function completeDungeon(password: string): Promise<string> {
   return output;
 }
 
-export async function viewBattleLog(password: string): Promise<string> {
-  const data = await storage.load(password);
+export async function viewBattleLog(saveKey: string): Promise<string> {
+  const data = await storage.load(saveKey);
   
   if (!data.player.name) {
     return "プレイヤーが見つかりません。";
