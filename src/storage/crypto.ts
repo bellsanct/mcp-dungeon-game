@@ -117,7 +117,22 @@ export class CryptoStorage {
     const encryptedData = readFileSync(this.dataFile);
     const decrypted = this.decrypt(encryptedData, key);
 
-    return JSON.parse(decrypted) as GameData;
+    const data = JSON.parse(decrypted) as GameData;
+
+    // マイグレーション: itemInventoryが存在しない場合は追加
+    if (!data.player.itemInventory) {
+      data.player.itemInventory = [];
+    }
+
+    // マイグレーション: item1, item2が存在しない場合は追加
+    if (!data.player.equipment.item1 && data.player.equipment.item1 !== null) {
+      data.player.equipment.item1 = null;
+    }
+    if (!data.player.equipment.item2 && data.player.equipment.item2 !== null) {
+      data.player.equipment.item2 = null;
+    }
+
+    return data;
   }
 
   exists(): boolean {
