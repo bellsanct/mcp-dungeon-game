@@ -42,19 +42,19 @@ export const DUNGEONS: Dungeon[] = [
     enemies: [
       {
         name: '野生の狼',
-        stats: { attack: 8, defense: 3, speed: 5, luck: 2, hitpoint: 50 },
+        stats: { attack: 6, defense: 3, speed: 5, luck: 2, hitpoint: 50 },
         goldDrop: [15, 30],
         equipmentDropRate: 0.12
       },
       {
         name: 'ダークエルフ',
-        stats: { attack: 12, defense: 5, speed: 8, luck: 5, hitpoint: 60 },
+        stats: { attack: 8, defense: 5, speed: 8, luck: 5, hitpoint: 60 },
         goldDrop: [25, 50],
         equipmentDropRate: 0.2
       },
       {
         name: 'トレント',
-        stats: { attack: 10, defense: 15, speed: 1, luck: 0, hitpoint: 100 },
+        stats: { attack: 10, defense: 10, speed: 1, luck: 0, hitpoint: 100 },
         goldDrop: [30, 60],
         equipmentDropRate: 0.15
       }

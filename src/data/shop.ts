@@ -59,6 +59,24 @@ export const SHOP_EQUIPMENT: ShopEquipment[] = [
     price: 200
   },
   {
+    id: 'boomelan',
+    name: 'ブーメラン',
+    type: 'weapon',
+    rarity: 'rare',
+    stats: { attack: 10, defense: 1, speed: 3, luck: 1 },
+    levelRange: [10, 30],
+    price: 180
+  },
+  {
+    id: 'magic_wand',
+    name: '魔法の杖',
+    type: 'weapon',
+    rarity: 'rare',
+    stats: { attack: 11, defense: 0, speed: 2, luck: 2 },
+    levelRange: [10, 30],
+    price: 220
+  },
+  {
     id: 'shop_iron_shield',
     name: '鉄の盾',
     type: 'shield',
@@ -66,6 +84,15 @@ export const SHOP_EQUIPMENT: ShopEquipment[] = [
     stats: { attack: 0, defense: 10, speed: -1, luck: 0 },
     levelRange: [10, 30],
     price: 200
+  },
+  {
+    id: 'magic_gauntlets',
+    name: '魔法の篭手',
+    type: 'shield',
+    rarity: 'rare',
+    stats: { attack: 0, defense: 8, speed: 0, luck: 2 },
+    levelRange: [10, 30],
+    price: 220
   },
   {
     id: 'shop_chainmail',
