@@ -16,7 +16,16 @@ export const SHOP_EQUIPMENT: ShopEquipment[] = [
     name: '錆びた剣',
     type: 'weapon',
     rarity: 'common',
-    stats: { attack: 5, defense: 0, speed: 0, luck: 0 },
+    stats: { attack: 5, defense: 0, speed: 0, luck: 1 },
+    levelRange: [1, 15],
+    price: 50
+  },
+  {
+    id: 'shop_wooden_bow',
+    name: '木の弓矢',
+    type: 'weapon',
+    rarity: 'common',
+    stats: { attack: 4, defense: 0, speed: 1, luck: 1 },
     levelRange: [1, 15],
     price: 50
   },
@@ -28,6 +37,15 @@ export const SHOP_EQUIPMENT: ShopEquipment[] = [
     stats: { attack: 0, defense: 5, speed: -1, luck: 0 },
     levelRange: [1, 15],
     price: 50
+  },
+  {
+    id: 'shop_pot_lid',
+    name: 'なべのフタ',
+    type: 'shield',
+    rarity: 'common',
+    stats: { attack: 0, defense: 2, speed: 3, luck: 1 },
+    levelRange: [1, 15],
+    price: 30
   },
   {
     id: 'shop_leather_armor',
@@ -46,6 +64,15 @@ export const SHOP_EQUIPMENT: ShopEquipment[] = [
     stats: { attack: 1, defense: 1, speed: 0, luck: 0 },
     levelRange: [1, 15],
     price: 50
+  },
+  {
+    id: 'shop_bronze_ring',
+    name: '青銅の指輪',
+    type: 'accessory',
+    rarity: 'common',
+    stats: { attack: 0, defense: 2, speed: 1, luck: 2 },
+    levelRange: [1, 15],
+    price: 60
   },
 
   // レア装備（中価格, Lv 10-30）
