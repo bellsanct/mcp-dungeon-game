@@ -1,11 +1,12 @@
 import type { Dungeon } from '../types.js';
-import { EQUIPMENT_POOL, BOSS_EXCLUSIVE_EQUIPMENT } from './equipment.js';
+import { BOSS_EXCLUSIVE_EQUIPMENT, getEquipmentByLevel } from './equipment.js';
 import { ITEMS_POOL } from './items.js';
 
 export const DUNGEONS: Dungeon[] = [
   {
     id: 'beginner_cave',
     name: '初心者の洞窟',
+    level: 5,
     floors: 5,
     baseTime: 10, // 10分
     enemies: [
@@ -29,12 +30,13 @@ export const DUNGEONS: Dungeon[] = [
       equipmentDropRate: 0.5,
       exclusiveDrops: [BOSS_EXCLUSIVE_EQUIPMENT[0]] // ゴブリンの王冠
     },
-    rewardPool: EQUIPMENT_POOL.filter(eq => eq.rarity === 'common' || eq.rarity === 'rare'),
+    rewardPool: getEquipmentByLevel(5), // ダンジョンレベル5に適した装備
     itemRewardPool: ITEMS_POOL.filter(item => item.id === 'herb' || item.id === 'charm')
   },
   {
     id: 'dark_forest',
     name: '暗黒の森',
+    level: 20,
     floors: 10,
     baseTime: 20, // 20分
     enemies: [
@@ -64,12 +66,13 @@ export const DUNGEONS: Dungeon[] = [
       equipmentDropRate: 0.7,
       exclusiveDrops: [BOSS_EXCLUSIVE_EQUIPMENT[1]] // 闇エルフの弓
     },
-    rewardPool: EQUIPMENT_POOL.filter(eq => eq.rarity === 'rare' || eq.rarity === 'epic'),
+    rewardPool: getEquipmentByLevel(20), // ダンジョンレベル20に適した装備
     itemRewardPool: ITEMS_POOL.filter(item => item.id === 'herb' || item.id === 'charm' || item.id === 'high_potion')
   },
   {
     id: 'ancient_ruins',
     name: '古代遺跡',
+    level: 40,
     floors: 15,
     baseTime: 30, // 30分
     enemies: [
@@ -99,12 +102,13 @@ export const DUNGEONS: Dungeon[] = [
       equipmentDropRate: 0.85,
       exclusiveDrops: [BOSS_EXCLUSIVE_EQUIPMENT[2]] // ゴーレムの核
     },
-    rewardPool: EQUIPMENT_POOL.filter(eq => eq.rarity === 'epic' || eq.rarity === 'legendary'),
+    rewardPool: getEquipmentByLevel(40), // ダンジョンレベル40に適した装備
     itemRewardPool: ITEMS_POOL.filter(item => item.id === 'high_potion' || item.id === 'golden_charm')
   },
   {
     id: 'demon_castle',
     name: '魔王城',
+    level: 80,
     floors: 25,
     baseTime: 60, // 60分
     enemies: [
@@ -134,7 +138,7 @@ export const DUNGEONS: Dungeon[] = [
       equipmentDropRate: 0.95,
       exclusiveDrops: [BOSS_EXCLUSIVE_EQUIPMENT[3], BOSS_EXCLUSIVE_EQUIPMENT[4]] // 魔王の剣と鎧
     },
-    rewardPool: EQUIPMENT_POOL.filter(eq => eq.rarity === 'legendary'),
+    rewardPool: getEquipmentByLevel(80), // ダンジョンレベル80に適した装備
     itemRewardPool: ITEMS_POOL.filter(item => item.id === 'high_potion' || item.id === 'golden_charm')
   }
 ];

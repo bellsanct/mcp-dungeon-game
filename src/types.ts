@@ -16,6 +16,7 @@ export interface Equipment {
   type: EquipmentType;
   rarity: Rarity;
   stats: Stats;
+  levelRange: [number, number]; // [最小レベル, 最大レベル] 例: [1, 10]
 }
 
 export interface Item {
@@ -114,6 +115,7 @@ export interface Enemy {
 export interface Dungeon {
   id: string;
   name: string;
+  level: number; // ダンジョンレベル（1-100）
   floors: number;
   baseTime: number; // minutes
   enemies: Enemy[];

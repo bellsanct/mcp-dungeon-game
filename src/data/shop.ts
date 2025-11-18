@@ -10,13 +10,14 @@ export interface ShopItem extends Item {
 
 // ショップで販売する装備
 export const SHOP_EQUIPMENT: ShopEquipment[] = [
-  // コモン装備（安価）
+  // コモン装備（安価, Lv 1-15）
   {
     id: 'shop_rusty_sword',
     name: '錆びた剣',
     type: 'weapon',
     rarity: 'common',
     stats: { attack: 5, defense: 0, speed: 0, luck: 0 },
+    levelRange: [1, 15],
     price: 50
   },
   {
@@ -25,6 +26,7 @@ export const SHOP_EQUIPMENT: ShopEquipment[] = [
     type: 'shield',
     rarity: 'common',
     stats: { attack: 0, defense: 5, speed: -1, luck: 0 },
+    levelRange: [1, 15],
     price: 50
   },
   {
@@ -33,6 +35,7 @@ export const SHOP_EQUIPMENT: ShopEquipment[] = [
     type: 'armor',
     rarity: 'common',
     stats: { attack: 0, defense: 3, speed: 0, luck: 0 },
+    levelRange: [1, 15],
     price: 50
   },
   {
@@ -41,16 +44,18 @@ export const SHOP_EQUIPMENT: ShopEquipment[] = [
     type: 'accessory',
     rarity: 'common',
     stats: { attack: 1, defense: 1, speed: 0, luck: 0 },
+    levelRange: [1, 15],
     price: 50
   },
 
-  // レア装備（中価格）
+  // レア装備（中価格, Lv 10-30）
   {
     id: 'shop_steel_sword',
     name: '鋼の剣',
     type: 'weapon',
     rarity: 'rare',
     stats: { attack: 12, defense: 0, speed: 0, luck: 0 },
+    levelRange: [10, 30],
     price: 200
   },
   {
@@ -59,6 +64,7 @@ export const SHOP_EQUIPMENT: ShopEquipment[] = [
     type: 'shield',
     rarity: 'rare',
     stats: { attack: 0, defense: 10, speed: -1, luck: 0 },
+    levelRange: [10, 30],
     price: 200
   },
   {
@@ -67,6 +73,7 @@ export const SHOP_EQUIPMENT: ShopEquipment[] = [
     type: 'armor',
     rarity: 'rare',
     stats: { attack: 0, defense: 8, speed: -2, luck: 0 },
+    levelRange: [10, 30],
     price: 200
   },
   {
@@ -75,6 +82,7 @@ export const SHOP_EQUIPMENT: ShopEquipment[] = [
     type: 'accessory',
     rarity: 'rare',
     stats: { attack: 2, defense: 2, speed: 1, luck: 2 },
+    levelRange: [10, 30],
     price: 250
   },
   {
@@ -83,16 +91,18 @@ export const SHOP_EQUIPMENT: ShopEquipment[] = [
     type: 'accessory',
     rarity: 'rare',
     stats: { attack: 0, defense: 0, speed: 0, luck: 10 },
+    levelRange: [10, 30],
     price: 300
   },
 
-  // エピック装備（高価格）
+  // エピック装備（高価格, Lv 25-60）
   {
     id: 'shop_flame_sword',
     name: '炎の剣',
     type: 'weapon',
     rarity: 'epic',
     stats: { attack: 25, defense: 0, speed: 3, luck: 0 },
+    levelRange: [25, 60],
     price: 800
   },
   {
@@ -101,6 +111,7 @@ export const SHOP_EQUIPMENT: ShopEquipment[] = [
     type: 'shield',
     rarity: 'epic',
     stats: { attack: 0, defense: 20, speed: -3, luck: 0 },
+    levelRange: [25, 60],
     price: 800
   },
   {
@@ -109,6 +120,7 @@ export const SHOP_EQUIPMENT: ShopEquipment[] = [
     type: 'armor',
     rarity: 'epic',
     stats: { attack: 0, defense: 18, speed: -3, luck: 0 },
+    levelRange: [25, 60],
     price: 800
   },
   {
@@ -117,6 +129,7 @@ export const SHOP_EQUIPMENT: ShopEquipment[] = [
     type: 'accessory',
     rarity: 'epic',
     stats: { attack: 5, defense: 5, speed: 2, luck: 5 },
+    levelRange: [25, 60],
     price: 1000
   }
 ];
