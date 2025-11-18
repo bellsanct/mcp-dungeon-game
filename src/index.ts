@@ -295,7 +295,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           content: [
             {
               type: 'text',
-              text: await playerTools.initializeGame(args.password as string),
+              text: await playerTools.initializeGame(args.save_key as string),
             },
           ],
         };
