@@ -119,20 +119,70 @@ export class CryptoStorage {
 
     const data = JSON.parse(decrypted) as GameData;
 
-    // マイグレーション: itemInventoryが存在しない場合は追加
-    if (!data.player.itemInventory) {
-      data.player.itemInventory = [];
+    // マイグレーション処理を実行
+    const migratedData = this.migrateData(data);
+
+    return migratedData;
+  }
+
+  private migrateData(data: GameData): GameData {
+    const currentVersion = '0.1.0';
+    const saveVersion = data.version || '0.0.0';
+
+    // バージョンが既に最新の場合はそのまま返す
+    if (saveVersion === currentVersion) {
+      return data;
     }
 
-    // マイグレーション: item1, item2が存在しない場合は追加
-    if (!data.player.equipment.item1 && data.player.equipment.item1 !== null) {
-      data.player.equipment.item1 = null;
+    console.error(`Migrating save data from version ${saveVersion} to ${currentVersion}...`);
+
+    // v0.0.0 → v0.1.0: 持ち物システムの追加
+    if (this.compareVersions(saveVersion, '0.1.0') < 0) {
+      // itemInventoryが存在しない場合は追加
+      if (!data.player.itemInventory) {
+        data.player.itemInventory = [];
+      }
+
+      // item1, item2が存在しない場合は追加
+      if (!data.player.equipment.item1 && data.player.equipment.item1 !== null) {
+        data.player.equipment.item1 = null;
+      }
+      if (!data.player.equipment.item2 && data.player.equipment.item2 !== null) {
+        data.player.equipment.item2 = null;
+      }
     }
-    if (!data.player.equipment.item2 && data.player.equipment.item2 !== null) {
-      data.player.equipment.item2 = null;
-    }
+
+    // 将来のマイグレーション例:
+    // if (this.compareVersions(saveVersion, '0.2.0') < 0) {
+    //   // v0.2.0の新機能のマイグレーション処理
+    // }
+
+    // バージョン番号を更新
+    data.version = currentVersion;
+
+    console.error(`Migration complete: ${saveVersion} → ${currentVersion}`);
 
     return data;
+  }
+
+  /**
+   * バージョン文字列を比較する
+   * @returns v1 < v2 なら負の数、v1 === v2 なら0、v1 > v2 なら正の数
+   */
+  private compareVersions(v1: string, v2: string): number {
+    const parts1 = v1.split('.').map(Number);
+    const parts2 = v2.split('.').map(Number);
+
+    for (let i = 0; i < Math.max(parts1.length, parts2.length); i++) {
+      const num1 = parts1[i] || 0;
+      const num2 = parts2[i] || 0;
+
+      if (num1 !== num2) {
+        return num1 - num2;
+      }
+    }
+
+    return 0;
   }
 
   exists(): boolean {
