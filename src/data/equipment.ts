@@ -178,6 +178,52 @@ export const EQUIPMENT_POOL: Equipment[] = [
   }
 ];
 
+// ボス・特定敵専用装備
+export const BOSS_EXCLUSIVE_EQUIPMENT: Equipment[] = [
+  // ゴブリンキング専用（初級ボス）
+  {
+    id: 'goblin_crown',
+    name: 'ゴブリンの王冠',
+    type: 'accessory',
+    rarity: 'rare',
+    stats: { attack: 3, defense: 3, speed: 2, luck: 5 }
+  },
+
+  // ダークエルフクイーン専用（中級ボス）
+  {
+    id: 'dark_elf_bow',
+    name: '闇エルフの弓',
+    type: 'weapon',
+    rarity: 'epic',
+    stats: { attack: 20, defense: 0, speed: 8, luck: 3 }
+  },
+
+  // ストーンゴーレム専用（上級ボス）
+  {
+    id: 'golem_core',
+    name: 'ゴーレムの核',
+    type: 'accessory',
+    rarity: 'epic',
+    stats: { attack: 8, defense: 15, speed: -2, luck: 0 }
+  },
+
+  // 魔王専用（最終ボス）
+  {
+    id: 'demon_lord_sword',
+    name: '魔王の剣',
+    type: 'weapon',
+    rarity: 'legendary',
+    stats: { attack: 45, defense: 5, speed: 8, luck: 8 }
+  },
+  {
+    id: 'demon_lord_armor',
+    name: '魔王の鎧',
+    type: 'armor',
+    rarity: 'legendary',
+    stats: { attack: 3, defense: 30, speed: 0, luck: 7 }
+  }
+];
+
 export function getEquipmentById(id: string): Equipment | undefined {
   return EQUIPMENT_POOL.find(eq => eq.id === id);
 }

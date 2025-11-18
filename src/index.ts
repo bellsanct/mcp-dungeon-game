@@ -9,6 +9,7 @@ import {
 
 import * as playerTools from './tools/player.js';
 import * as dungeonTools from './tools/dungeon.js';
+import * as shopTools from './tools/shop.js';
 
 const server = new Server(
   {
@@ -243,6 +244,38 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           required: ['slot', 'password'],
         },
       },
+      {
+        name: 'shop_inventory',
+        description: 'ショップで販売中の商品一覧を表示します。装備と持ち物アイテムを購入できます。探索中でも閲覧可能ですが、購入は待機中のみです。',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            password: {
+              type: 'string',
+              description: 'ゲームパスワード',
+            },
+          },
+          required: ['password'],
+        },
+      },
+      {
+        name: 'buy_item',
+        description: 'ショップからアイテムを購入します。ゴールドを消費してインベントリに追加されます。探索中は購入できません。',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            item_id: {
+              type: 'string',
+              description: '購入するアイテムのID（shop_inventoryで確認）',
+            },
+            password: {
+              type: 'string',
+              description: 'ゲームパスワード',
+            },
+          },
+          required: ['item_id', 'password'],
+        },
+      },
     ],
   };
 });
@@ -403,6 +436,29 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               type: 'text',
               text: await playerTools.unequipHoldingItem(
                 args.slot as 'item1' | 'item2',
+                args.password as string
+              ),
+            },
+          ],
+        };
+
+      case 'shop_inventory':
+        return {
+          content: [
+            {
+              type: 'text',
+              text: await shopTools.getShopInventory(args.password as string),
+            },
+          ],
+        };
+
+      case 'buy_item':
+        return {
+          content: [
+            {
+              type: 'text',
+              text: await shopTools.buyItem(
+                args.item_id as string,
                 args.password as string
               ),
             },

@@ -21,6 +21,27 @@ export const ITEMS_POOL: Item[] = [
       blockNegativeEvent: true,
       singleUse: true
     }
+  },
+  {
+    id: 'high_potion',
+    name: '上級回復薬',
+    type: 'herb',
+    description: 'HP20%以下で自動的に80%回復する',
+    effect: {
+      healPercentage: 80,
+      activateAtHpPercentage: 20,
+      singleUse: true
+    }
+  },
+  {
+    id: 'golden_charm',
+    name: '金のおまもり',
+    type: 'charm',
+    description: 'マイナスなイベントを1度だけ回避できる（強力版）',
+    effect: {
+      blockNegativeEvent: true,
+      singleUse: true
+    }
   }
 ];
 

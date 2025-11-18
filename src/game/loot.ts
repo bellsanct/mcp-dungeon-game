@@ -17,34 +17,47 @@ export function rollLoot(enemy: Enemy, luckStat: number, rewardPool: Equipment[]
 
   // Roll for equipment drop
   const dropChance = enemy.equipmentDropRate * (1 + luckStat / 100);
-  
-  if (Math.random() < dropChance && rewardPool.length > 0) {
-    // Determine rarity based on luck
-    const rarityRoll = Math.random() * 100;
-    const luckBonus = luckStat / 2;
-    
-    let targetRarity: string;
-    if (rarityRoll + luckBonus > 98) {
-      targetRarity = 'legendary';
-    } else if (rarityRoll + luckBonus > 90) {
-      targetRarity = 'epic';
-    } else if (rarityRoll + luckBonus > 70) {
-      targetRarity = 'rare';
-    } else {
-      targetRarity = 'common';
+
+  if (Math.random() < dropChance) {
+    // 優先的に敵固有ドロップをチェック（低確率）
+    if (enemy.exclusiveDrops && enemy.exclusiveDrops.length > 0) {
+      const exclusiveDropChance = 0.15; // 15%の確率で専用装備
+      if (Math.random() < exclusiveDropChance) {
+        const randomExclusive = enemy.exclusiveDrops[Math.floor(Math.random() * enemy.exclusiveDrops.length)];
+        result.equipment.push(randomExclusive);
+        return result;
+      }
     }
 
-    // Filter pool by rarity
-    let eligibleItems = rewardPool.filter(item => item.rarity === targetRarity);
-    
-    // Fallback to all items if no items of target rarity
-    if (eligibleItems.length === 0) {
-      eligibleItems = rewardPool;
-    }
+    // 専用装備がドロップしなかった場合、通常のダンジョンプールから
+    if (rewardPool.length > 0) {
+      // Determine rarity based on luck
+      const rarityRoll = Math.random() * 100;
+      const luckBonus = luckStat / 2;
 
-    // Pick random item
-    const randomItem = eligibleItems[Math.floor(Math.random() * eligibleItems.length)];
-    result.equipment.push(randomItem);
+      let targetRarity: string;
+      if (rarityRoll + luckBonus > 98) {
+        targetRarity = 'legendary';
+      } else if (rarityRoll + luckBonus > 90) {
+        targetRarity = 'epic';
+      } else if (rarityRoll + luckBonus > 70) {
+        targetRarity = 'rare';
+      } else {
+        targetRarity = 'common';
+      }
+
+      // Filter pool by rarity
+      let eligibleItems = rewardPool.filter(item => item.rarity === targetRarity);
+
+      // Fallback to all items if no items of target rarity
+      if (eligibleItems.length === 0) {
+        eligibleItems = rewardPool;
+      }
+
+      // Pick random item
+      const randomItem = eligibleItems[Math.floor(Math.random() * eligibleItems.length)];
+      result.equipment.push(randomItem);
+    }
   }
 
   return result;

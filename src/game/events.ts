@@ -69,7 +69,8 @@ export function rollForEvent(
   floor: number,
   luckStat: number,
   rewardPool: Equipment[],
-  equippedCharm?: Item
+  equippedCharm?: Item,
+  itemRewardPool?: Item[]
 ): EventLogEntry | null {
   // 運が高いほどポジティブなイベント発生率が上がる
   const luckModifier = luckStat / 100;
@@ -87,7 +88,7 @@ export function rollForEvent(
     }
 
     if (Math.random() < probability) {
-      const event = generateEvent(floor, config, rewardPool);
+      const event = generateEvent(floor, config, rewardPool, itemRewardPool);
 
       // Check if charm should block this negative event
       if (
@@ -119,7 +120,8 @@ function isNegativeEvent(eventType: EventType): boolean {
 function generateEvent(
   floor: number,
   config: EventConfig,
-  rewardPool: Equipment[]
+  rewardPool: Equipment[],
+  itemRewardPool?: Item[]
 ): EventLogEntry {
   const event: EventLogEntry = {
     floor,
@@ -151,10 +153,13 @@ function generateEvent(
     event.effect.itemsGained = [randomItem];
   }
 
-  // 持ち物ドロップ
-  if (config.canDropHoldingItem && ITEMS_POOL.length > 0) {
-    const randomHoldingItem = ITEMS_POOL[Math.floor(Math.random() * ITEMS_POOL.length)];
-    event.effect.holdingItemsGained = [cloneItem(randomHoldingItem)];
+  // 持ち物ドロップ（ダンジョン固有のプールから選択、なければ全体プールから）
+  if (config.canDropHoldingItem) {
+    const pool = itemRewardPool && itemRewardPool.length > 0 ? itemRewardPool : ITEMS_POOL;
+    if (pool.length > 0) {
+      const randomHoldingItem = pool[Math.floor(Math.random() * pool.length)];
+      event.effect.holdingItemsGained = [cloneItem(randomHoldingItem)];
+    }
   }
 
   return event;

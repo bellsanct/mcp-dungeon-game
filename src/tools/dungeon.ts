@@ -307,7 +307,8 @@ async function completeDungeon(password: string): Promise<string> {
       currentFloor,
       playerStats.luck,
       dungeon.rewardPool,
-      charmUsedTotal ? undefined : equippedCharm
+      charmUsedTotal ? undefined : equippedCharm,
+      dungeon.itemRewardPool
     );
     if (event) {
       events.push(event);

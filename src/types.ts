@@ -105,6 +105,7 @@ export interface Enemy {
   stats: Stats;
   goldDrop: [number, number]; // [min, max]
   equipmentDropRate: number; // 0-1
+  exclusiveDrops?: Equipment[]; // この敵専用のドロップ装備
 }
 
 export interface Dungeon {
@@ -115,6 +116,7 @@ export interface Dungeon {
   enemies: Enemy[];
   boss: Enemy;
   rewardPool: Equipment[];
+  itemRewardPool: Item[]; // 持ち物ドロップテーブル
 }
 
 export interface GameData {

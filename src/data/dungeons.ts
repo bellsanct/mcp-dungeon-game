@@ -1,5 +1,6 @@
 import type { Dungeon } from '../types.js';
-import { EQUIPMENT_POOL } from './equipment.js';
+import { EQUIPMENT_POOL, BOSS_EXCLUSIVE_EQUIPMENT } from './equipment.js';
+import { ITEMS_POOL } from './items.js';
 
 export const DUNGEONS: Dungeon[] = [
   {
@@ -10,24 +11,26 @@ export const DUNGEONS: Dungeon[] = [
     enemies: [
       {
         name: 'スライム',
-        stats: { attack: 3, defense: 1, speed: 1, luck: 0 },
+        stats: { attack: 1, defense: 1, speed: 1, luck: 0 },
         goldDrop: [5, 15],
         equipmentDropRate: 0.1
       },
       {
         name: 'ゴブリン',
-        stats: { attack: 5, defense: 2, speed: 2, luck: 1 },
+        stats: { attack: 2, defense: 2, speed: 2, luck: 1 },
         goldDrop: [10, 25],
         equipmentDropRate: 0.15
       }
     ],
     boss: {
       name: '洞窟トロル',
-      stats: { attack: 15, defense: 10, speed: 3, luck: 2 },
+      stats: { attack: 5, defense: 5, speed: 3, luck: 2 },
       goldDrop: [50, 100],
-      equipmentDropRate: 0.5
+      equipmentDropRate: 0.5,
+      exclusiveDrops: [BOSS_EXCLUSIVE_EQUIPMENT[0]] // ゴブリンの王冠
     },
-    rewardPool: EQUIPMENT_POOL.filter(eq => eq.rarity === 'common' || eq.rarity === 'rare')
+    rewardPool: EQUIPMENT_POOL.filter(eq => eq.rarity === 'common' || eq.rarity === 'rare'),
+    itemRewardPool: ITEMS_POOL.filter(item => item.id === 'herb' || item.id === 'charm')
   },
   {
     id: 'dark_forest',
@@ -58,9 +61,11 @@ export const DUNGEONS: Dungeon[] = [
       name: '森の守護者',
       stats: { attack: 30, defense: 20, speed: 10, luck: 5 },
       goldDrop: [150, 250],
-      equipmentDropRate: 0.7
+      equipmentDropRate: 0.7,
+      exclusiveDrops: [BOSS_EXCLUSIVE_EQUIPMENT[1]] // 闇エルフの弓
     },
-    rewardPool: EQUIPMENT_POOL.filter(eq => eq.rarity === 'rare' || eq.rarity === 'epic')
+    rewardPool: EQUIPMENT_POOL.filter(eq => eq.rarity === 'rare' || eq.rarity === 'epic'),
+    itemRewardPool: ITEMS_POOL.filter(item => item.id === 'herb' || item.id === 'charm' || item.id === 'high_potion')
   },
   {
     id: 'ancient_ruins',
@@ -91,9 +96,11 @@ export const DUNGEONS: Dungeon[] = [
       name: '古代のリッチ',
       stats: { attack: 45, defense: 30, speed: 15, luck: 10 },
       goldDrop: [300, 500],
-      equipmentDropRate: 0.85
+      equipmentDropRate: 0.85,
+      exclusiveDrops: [BOSS_EXCLUSIVE_EQUIPMENT[2]] // ゴーレムの核
     },
-    rewardPool: EQUIPMENT_POOL.filter(eq => eq.rarity === 'epic' || eq.rarity === 'legendary')
+    rewardPool: EQUIPMENT_POOL.filter(eq => eq.rarity === 'epic' || eq.rarity === 'legendary'),
+    itemRewardPool: ITEMS_POOL.filter(item => item.id === 'high_potion' || item.id === 'golden_charm')
   },
   {
     id: 'demon_castle',
@@ -124,9 +131,11 @@ export const DUNGEONS: Dungeon[] = [
       name: '魔王',
       stats: { attack: 80, defense: 50, speed: 25, luck: 15 },
       goldDrop: [800, 1500],
-      equipmentDropRate: 0.95
+      equipmentDropRate: 0.95,
+      exclusiveDrops: [BOSS_EXCLUSIVE_EQUIPMENT[3], BOSS_EXCLUSIVE_EQUIPMENT[4]] // 魔王の剣と鎧
     },
-    rewardPool: EQUIPMENT_POOL.filter(eq => eq.rarity === 'legendary')
+    rewardPool: EQUIPMENT_POOL.filter(eq => eq.rarity === 'legendary'),
+    itemRewardPool: ITEMS_POOL.filter(item => item.id === 'high_potion' || item.id === 'golden_charm')
   }
 ];
 
