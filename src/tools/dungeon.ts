@@ -203,7 +203,7 @@ export async function checkProgress(password: string): Promise<string> {
     output += `推定戦闘数: 約${estimatedBattles}回\n`;
     output += `推定イベント: 約${estimatedEvents}回\n\n`;
 
-    // 現在までの階層表示（簡易）
+    // 現在までの階層表示と推定バトルログ
     if (displayFloor > 1) {
       output += `通過した階層:\n`;
       const maxDisplay = Math.min(displayFloor, 5); // 最新5階まで表示
@@ -219,6 +219,24 @@ export async function checkProgress(password: string): Promise<string> {
 
       if (displayFloor < dungeon.floors) {
         output += `  ... ${dungeon.floors - displayFloor}階が残っています\n`;
+      }
+      output += '\n';
+
+      // 推定バトルログ（最新3階分）
+      output += `最近の戦闘（推定）:\n`;
+      const recentFloors = Math.min(3, displayFloor);
+      const logStartFloor = Math.max(1, displayFloor - recentFloors + 1);
+
+      for (let f = logStartFloor; f <= displayFloor; f++) {
+        // ランダムに敵を選択（実際はシミュレーション）
+        const enemy1 = dungeon.enemies[Math.floor(Math.random() * dungeon.enemies.length)];
+        const enemy2 = dungeon.enemies[Math.floor(Math.random() * dungeon.enemies.length)];
+
+        if (f === displayFloor) {
+          output += `  ${f}階: ${enemy1.name}と交戦中...\n`;
+        } else {
+          output += `  ${f}階: ${enemy1.name}, ${enemy2.name}を撃破\n`;
+        }
       }
       output += '\n';
     }
