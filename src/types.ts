@@ -25,6 +25,7 @@ export interface Item {
   type: ItemType;
   description: string;
   effect: ItemEffect;
+  levelRange?: [number, number]; // アイテムのレベル範囲（オプション）
 }
 
 export interface ItemEffect {
@@ -34,6 +35,10 @@ export interface ItemEffect {
 
   // おまもり用: マイナスイベント回避
   blockNegativeEvent?: boolean;
+
+  // 復活用: HP0で復活
+  revive?: boolean;
+
   singleUse?: boolean;
 }
 

@@ -167,6 +167,14 @@ export const SHOP_ITEMS: ShopItem[] = [
     description: 'マイナスなイベントを1度だけ回避できる（強力版）',
     effect: { blockNegativeEvent: true, singleUse: true },
     price: 400
+  },
+  {
+    id: 'shop_holy_charm',
+    name: '聖なるおまもり',
+    type: 'charm',
+    description: 'HPが0になったときに、1度だけ全回復して復活できる',
+    effect: { revive: true, healPercentage: 100, singleUse: true },
+    price: 800
   }
 ];
 

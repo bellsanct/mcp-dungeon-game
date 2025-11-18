@@ -1,6 +1,6 @@
 import type { Dungeon } from '../types.js';
 import { BOSS_EXCLUSIVE_EQUIPMENT, getEquipmentByLevel } from './equipment.js';
-import { ITEMS_POOL } from './items.js';
+import { getItemsByLevel } from './items.js';
 
 export const DUNGEONS: Dungeon[] = [
   {
@@ -31,7 +31,7 @@ export const DUNGEONS: Dungeon[] = [
       exclusiveDrops: [BOSS_EXCLUSIVE_EQUIPMENT[0]] // ゴブリンの王冠
     },
     rewardPool: getEquipmentByLevel(5), // ダンジョンレベル5に適した装備
-    itemRewardPool: ITEMS_POOL.filter(item => item.id === 'herb' || item.id === 'charm')
+    itemRewardPool: getItemsByLevel(5) // ダンジョンレベル5に適したアイテム
   },
   {
     id: 'dark_forest',
@@ -67,7 +67,7 @@ export const DUNGEONS: Dungeon[] = [
       exclusiveDrops: [BOSS_EXCLUSIVE_EQUIPMENT[1]] // 闇エルフの弓
     },
     rewardPool: getEquipmentByLevel(20), // ダンジョンレベル20に適した装備
-    itemRewardPool: ITEMS_POOL.filter(item => item.id === 'herb' || item.id === 'charm' || item.id === 'high_potion')
+    itemRewardPool: getItemsByLevel(20) // ダンジョンレベル20に適したアイテム
   },
   {
     id: 'ancient_ruins',
@@ -103,7 +103,7 @@ export const DUNGEONS: Dungeon[] = [
       exclusiveDrops: [BOSS_EXCLUSIVE_EQUIPMENT[2]] // ゴーレムの核
     },
     rewardPool: getEquipmentByLevel(40), // ダンジョンレベル40に適した装備
-    itemRewardPool: ITEMS_POOL.filter(item => item.id === 'high_potion' || item.id === 'golden_charm')
+    itemRewardPool: getItemsByLevel(40) // ダンジョンレベル40に適したアイテム
   },
   {
     id: 'demon_castle',
@@ -139,7 +139,7 @@ export const DUNGEONS: Dungeon[] = [
       exclusiveDrops: [BOSS_EXCLUSIVE_EQUIPMENT[3], BOSS_EXCLUSIVE_EQUIPMENT[4]] // 魔王の剣と鎧
     },
     rewardPool: getEquipmentByLevel(80), // ダンジョンレベル80に適した装備
-    itemRewardPool: ITEMS_POOL.filter(item => item.id === 'high_potion' || item.id === 'golden_charm')
+    itemRewardPool: getItemsByLevel(80) // ダンジョンレベル80に適したアイテム
   }
 ];
 

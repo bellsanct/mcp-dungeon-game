@@ -7,6 +7,7 @@ export interface CombatResult {
   criticalHits: number;
   dodges: number;
   herbUsed: boolean;
+  revived: boolean;
   playerHpAfterBattle: number;
 }
 
@@ -39,7 +40,8 @@ export function simulateCombat(
   enemy: Enemy,
   playerCurrentHp: number,
   playerMaxHp: number,
-  equippedHerb?: Item
+  equippedHerb?: Item,
+  equippedCharm?: Item
 ): CombatResult {
   const result: CombatResult = {
     victory: false,
@@ -48,6 +50,7 @@ export function simulateCombat(
     criticalHits: 0,
     dodges: 0,
     herbUsed: false,
+    revived: false,
     playerHpAfterBattle: 0
   };
 
@@ -59,6 +62,7 @@ export function simulateCombat(
   let turn = 0;
   const maxTurns = 100; // Prevent infinite loops
   let herbUsed = false;
+  let reviveUsed = false;
 
   while (playerHp > 0 && enemyHp > 0 && turn < maxTurns) {
     // Player's turn
@@ -108,6 +112,16 @@ export function simulateCombat(
         herbUsed = true;
         result.herbUsed = true;
       }
+    }
+
+    // Check if player died and can be revived
+    if (playerHp <= 0 && !reviveUsed && equippedCharm?.effect.revive) {
+      const reviveHealAmount = equippedCharm.effect.healPercentage
+        ? Math.floor(maxPlayerHp * (equippedCharm.effect.healPercentage / 100))
+        : maxPlayerHp; // デフォルトで全回復
+      playerHp = reviveHealAmount;
+      reviveUsed = true;
+      result.revived = true;
     }
 
     turn++;

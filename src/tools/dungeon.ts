@@ -346,7 +346,8 @@ async function completeDungeon(saveKey: string): Promise<string> {
         enemy,
         playerCurrentHp,
         playerMaxHp,
-        herbUsedTotal ? undefined : equippedHerb
+        herbUsedTotal ? undefined : equippedHerb,
+        charmUsedTotal ? undefined : equippedCharm
       );
 
       // 戦闘後のHPを更新
@@ -355,6 +356,11 @@ async function completeDungeon(saveKey: string): Promise<string> {
       // 薬草が使用された場合
       if (combatResult.herbUsed) {
         herbUsedTotal = true;
+      }
+
+      // 復活が使用された場合
+      if (combatResult.revived) {
+        charmUsedTotal = true;
       }
 
       const loot = rollLoot(enemy, playerStats.luck, dungeon.rewardPool);
@@ -412,7 +418,8 @@ async function completeDungeon(saveKey: string): Promise<string> {
     dungeon.boss,
     playerCurrentHp,
     playerMaxHp,
-    herbUsedTotal ? undefined : equippedHerb
+    herbUsedTotal ? undefined : equippedHerb,
+    charmUsedTotal ? undefined : equippedCharm
   );
 
   // 戦闘後のHPを更新
@@ -420,6 +427,10 @@ async function completeDungeon(saveKey: string): Promise<string> {
 
   if (bossCombat.herbUsed) {
     herbUsedTotal = true;
+  }
+
+  if (bossCombat.revived) {
+    charmUsedTotal = true;
   }
 
   if (bossCombat.victory) {
@@ -430,6 +441,9 @@ async function completeDungeon(saveKey: string): Promise<string> {
     output += `  回避: ${bossCombat.dodges}回\n`;
     if (bossCombat.herbUsed) {
       output += `  薬草使用: ✅\n`;
+    }
+    if (bossCombat.revived) {
+      output += `  🌟 復活: ${equippedCharm?.name}により復活！\n`;
     }
     output += '\n';
 
