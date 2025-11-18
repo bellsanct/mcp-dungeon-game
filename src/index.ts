@@ -318,7 +318,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           content: [
             {
               type: 'text',
-              text: await playerTools.viewStatus(args.password as string),
+              text: await playerTools.viewStatus(args.save_key as string),
             },
           ],
         };
@@ -328,7 +328,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           content: [
             {
               type: 'text',
-              text: await playerTools.viewInventory(args.password as string),
+              text: await playerTools.viewInventory(args.save_key as string),
             },
           ],
         };
@@ -364,7 +364,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           content: [
             {
               type: 'text',
-              text: await dungeonTools.listDungeons(args.password as string),
+              text: await dungeonTools.listDungeons(args.save_key as string),
             },
           ],
         };
@@ -400,7 +400,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           content: [
             {
               type: 'text',
-              text: await dungeonTools.checkProgress(args.password as string),
+              text: await dungeonTools.checkProgress(args.save_key as string),
             },
           ],
         };
@@ -410,7 +410,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           content: [
             {
               type: 'text',
-              text: await dungeonTools.viewBattleLog(args.password as string),
+              text: await dungeonTools.viewBattleLog(args.save_key as string),
             },
           ],
         };
